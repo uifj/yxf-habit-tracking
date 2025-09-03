@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:yxf_habit_tracking_app/home/home.dart';
-import 'package:yxf_habit_tracking_app/l10n/l10n.dart';
-import 'package:yxf_habit_tracking_app/theme/theme.dart';
+import 'package:yxf_habit_tracking_app/features/home/home.dart';
+import 'package:yxf_habit_tracking_app/app/l10n/l10n.dart';
+import 'package:yxf_habit_tracking_app/app/theme/theme.dart';
 import 'package:todos_repository/todos_repository.dart';
 
 class App extends StatelessWidget {

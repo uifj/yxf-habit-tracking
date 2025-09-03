@@ -7,20 +7,33 @@ environment:
   sdk: ">=3.8.0 <4.0.0"
 
 dependencies:
-  bloc: ^9.0.0
-  equatable: ^2.0.0
   flutter:
     sdk: flutter
-  flutter_bloc: ^9.1.0
   flutter_localizations:
     sdk: flutter
+  bloc: ^9.0.0
+  equatable: ^2.0.0
+  flutter_bloc: ^9.1.0
+  flutter_inappwebview: ^6.1.5
   intl: ^0.20.2
+  permission_handler: ^11.3.0
+  device_info_plus: ^9.1.2
+  path_provider: ^2.1.5
+  path: ^1.9.0
+  table_calendar: ^3.2.0
+  url_launcher: ^6.3.2
+
+
   local_storage_todos_api:
     path: packages/local_storage_todos_api
   todos_api:
     path: packages/todos_api
   todos_repository:
     path: packages/todos_repository
+  tencent_cloud_chat_common:
+    path: modules/tencent_cloud_chat_common
+  package_info_plus: ^8.3.1
+    
 
 dev_dependencies:
   bloc_lint: ^0.3.0

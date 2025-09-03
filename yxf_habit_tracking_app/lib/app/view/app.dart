@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:yxf_habit_tracking_app/counter/counter.dart';
-import 'package:yxf_habit_tracking_app/l10n/l10n.dart';
+import 'package:yxf_habit_tracking_app/features/counter/counter.dart';
+import 'package:yxf_habit_tracking_app/app/l10n/l10n.dart';
 
 class App extends StatelessWidget {
   const App({super.key});

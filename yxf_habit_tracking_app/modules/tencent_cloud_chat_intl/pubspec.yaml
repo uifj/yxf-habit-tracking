@@ -1,13 +1,10 @@
-name: tencent_cloud_chat_common
-description: Tencent Cloud Chat Common Widgets offers a collection of versatile and reusable components, designed to streamline development and ensure UI consistency across mobile and desktop environments.
-version: 4.1.0
-repository: https://github.com/TencentCloud/chat-uikit-flutter/tree/v2/tencent_cloud_chat_common
+name: tencent_cloud_chat_intl
+description: A lightweight internationalization tool for TencentCloudChat and other applications, based on Flutter's official `intl` solution.
+version: 2.1.3
+repository: https://github.com/RoleWong/tencent_chat_intl_tool
 homepage: https://trtc.io/products/chat?utm_source=flutter_pub
-
-publish_to: none
-
 environment:
-  sdk: '>=3.1.0 <4.0.0'
+  sdk: '>=3.0.0 <4.0.0'
   flutter: ">=1.17.0"
 
 platforms:
@@ -17,54 +14,27 @@ platforms:
   web:
   windows:
 
-
 dependencies:
   flutter:
     sdk: flutter
-  # tencent_cloud_chat_sdk: ^8.6.7019+2
-  tencent_cloud_chat_intl:
-    path: ../tencent_cloud_chat_intl
-  tencent_cloud_uikit_core: ^1.7.0
-  hive: ^2.2.3
-  hive_flutter: ^1.1.0
-  scroll_to_index: ^3.0.1
-  flutter_screenutil: ^5.9.0
-  universal_html: ^2.2.4
-  audioplayers: ^5.2.1
-  collection: ^1.18.0
-  hash: ^1.0.4
-  exif: ^3.3.0
-  url_launcher: ^6.2.6
-  cached_network_image: ^3.4.1
-  pull_to_refresh_flutter3: ^2.0.2
-  shimmer: ^3.0.0
-  extended_image: ^8.1.1
-  chewie_for_us: ^1.5.0
-  flutter_svg: ^2.0.7
-  permission_handler: ^11.3.0
-  device_info_plus: ^9.1.2
-  path_provider: ^2.1.5
-  path: ^1.9.0
-
-dependency_overrides:
+  flutter_localizations:
+    sdk: flutter
   intl: ^0.20.2
-#  tencent_cloud_uikit_core:
-#    path: ../TUICore
-#  tencent_cloud_chat_intl:
-#    path: ../TUIInternational
+  yaml: ^3.1.2
+  file: ^7.0.0
+  path: ^1.8.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
 
-# For information on the generic Dart part of this file, see the
+# For information on the generic Dart part of "pubspec.yaml""../TUIInternational"this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
 flutter:
-  assets:
-    - images/
+
 # To add assets to your package, add an assets section, like this:
 # assets:
 #   - images/a_dot_burr.jpeg

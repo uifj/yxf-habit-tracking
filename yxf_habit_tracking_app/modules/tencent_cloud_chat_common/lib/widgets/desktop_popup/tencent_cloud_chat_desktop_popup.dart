@@ -46,7 +46,13 @@ class TencentCloudChatDesktopPopup {
     VoidCallback? onCancel,
     double? width,
     double? height,
-    List<({String label, VoidCallback onTap, TencentCloudChatDesktopPopupActionButtonType type})>? actions,
+    List<
+            ({
+              String label,
+              VoidCallback onTap,
+              TencentCloudChatDesktopPopupActionButtonType type
+            })>?
+        actions,
   }) {
     return TencentCloudChatDesktopPopup.showPopupWindow(
       operationKey: operationKey,
@@ -55,14 +61,17 @@ class TencentCloudChatDesktopPopup {
       onCancel: (actions ?? []).isEmpty ? onCancel : null,
       onConfirm: (actions ?? []).isEmpty ? onConfirm : null,
       width: width ?? 400,
-      height: height ?? ((TencentCloudChatUtils.checkString(title) != null) ? 160 : 120),
+      height: height ??
+          ((TencentCloudChatUtils.checkString(title) != null) ? 160 : 120),
       child: (onClose) => TencentCloudChatThemeWidget(
         build: (context, colorTheme, textStyle) => Container(
           padding: const EdgeInsets.only(left: 16, right: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: (actions ?? []).isEmpty ? MainAxisAlignment.start : MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: (actions ?? []).isEmpty
+                ? MainAxisAlignment.start
+                : MainAxisAlignment.spaceBetween,
             children: [
               if (TencentCloudChatUtils.checkString(title) != null)
                 Container(
@@ -105,11 +114,16 @@ class TencentCloudChatDesktopPopup {
                         children: (actions ?? []).map(
                           (e) {
                             {
-                              if (e.type == TencentCloudChatDesktopPopupActionButtonType.secondary) {
+                              if (e.type ==
+                                  TencentCloudChatDesktopPopupActionButtonType
+                                      .secondary) {
                                 return OutlinedButton(
                                   style: ButtonStyle(
-                                    side: MaterialStateProperty.resolveWith<BorderSide>((Set<MaterialState> states) {
-                                      return BorderSide(color: colorTheme.dividerColor, width: 1);
+                                    side: WidgetStateProperty.resolveWith<
+                                        BorderSide>((Set<WidgetState> states) {
+                                      return BorderSide(
+                                          color: colorTheme.dividerColor,
+                                          width: 1);
                                     }),
                                   ),
                                   onPressed: () {
@@ -118,7 +132,8 @@ class TencentCloudChatDesktopPopup {
                                   },
                                   child: Text(
                                     e.label,
-                                    style: TextStyle(color: colorTheme.secondaryTextColor),
+                                    style: TextStyle(
+                                        color: colorTheme.secondaryTextColor),
                                   ),
                                 );
                               }
@@ -129,7 +144,8 @@ class TencentCloudChatDesktopPopup {
                                 },
                                 child: Text(
                                   e.label,
-                                  style: TextStyle(color: colorTheme.primaryColor),
+                                  style:
+                                      TextStyle(color: colorTheme.primaryColor),
                                 ),
                               );
                             }
@@ -171,12 +187,14 @@ class TencentCloudChatDesktopPopup {
 
     final Widget contentWidget = TencentCloudChatThemeWidget(
       build: (context, colorTheme, textStyle) => ClipRRect(
-        borderRadius: borderRadius ?? const BorderRadius.all(Radius.circular(16)),
+        borderRadius:
+            borderRadius ?? const BorderRadius.all(Radius.circular(16)),
         child: Container(
           width: width,
           height: height,
           decoration: BoxDecoration(
-            borderRadius: borderRadius ?? const BorderRadius.all(Radius.circular(16)),
+            borderRadius:
+                borderRadius ?? const BorderRadius.all(Radius.circular(16)),
             color: colorTheme.backgroundColor,
             border: isDarkBackground
                 ? Border.all(
@@ -207,11 +225,16 @@ class TencentCloudChatDesktopPopup {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      Expanded(child: Text(
-                        title,
-                        style: TextStyle(fontSize: 18, color: colorTheme.primaryTextColor),
-                      ),),
-                      const SizedBox(width: 16,),
+                      Expanded(
+                        child: Text(
+                          title,
+                          style: TextStyle(
+                              fontSize: 18, color: colorTheme.primaryTextColor),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 16,
+                      ),
                       InkWell(
                         onTap: () {
                           if (onSubmit != null) {
@@ -225,7 +248,9 @@ class TencentCloudChatDesktopPopup {
                             entry = null;
                           }
                         },
-                        child: onSubmit != null ? (submitWidget ?? const Icon(Icons.check)) : const Icon(Icons.close),
+                        child: onSubmit != null
+                            ? (submitWidget ?? const Icon(Icons.check))
+                            : const Icon(Icons.close),
                       )
                     ],
                   ),
@@ -268,8 +293,11 @@ class TencentCloudChatDesktopPopup {
                           margin: const EdgeInsets.only(right: 16),
                           child: OutlinedButton(
                               style: ButtonStyle(
-                                side: MaterialStateProperty.resolveWith<BorderSide>((Set<MaterialState> states) {
-                                  return BorderSide(color: colorTheme.dividerColor, width: 1);
+                                side:
+                                    WidgetStateProperty.resolveWith<BorderSide>(
+                                        (Set<WidgetState> states) {
+                                  return BorderSide(
+                                      color: colorTheme.dividerColor, width: 1);
                                 }),
                               ),
                               onPressed: () {
@@ -284,7 +312,8 @@ class TencentCloudChatDesktopPopup {
                               },
                               child: Text(
                                 tL10n.cancel,
-                                style: TextStyle(color: colorTheme.secondaryTextColor),
+                                style: TextStyle(
+                                    color: colorTheme.secondaryTextColor),
                               )),
                         ),
                       if (onConfirm != null)
@@ -303,7 +332,8 @@ class TencentCloudChatDesktopPopup {
                               },
                               child: Text(
                                 tL10n.confirm,
-                                style: TextStyle(color: colorTheme.primaryColor),
+                                style:
+                                    TextStyle(color: colorTheme.primaryColor),
                               )),
                         ),
                     ],

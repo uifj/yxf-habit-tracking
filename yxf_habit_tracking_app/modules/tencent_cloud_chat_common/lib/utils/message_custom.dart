@@ -2,7 +2,8 @@ import 'package:tencent_cloud_chat_sdk/utils/utils.dart';
 
 class MessageCustom {
   static String businessIDGroupCreate = "group_create";
-  static int groupCreateVersion = 4; // Android/iOS/Web interoperable version for video call
+  static int groupCreateVersion =
+      4; // Android/iOS/Web interoperable version for video call
 
   late int version;
   late String businessID;
@@ -36,5 +37,4 @@ class MessageCustom {
     content = json['content'];
     cmd = json['cmd'];
   }
-
 }
