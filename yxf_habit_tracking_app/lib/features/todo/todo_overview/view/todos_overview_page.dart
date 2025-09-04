@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:yxf_habit_tracking_app/app/l10n/l10n.dart';
 import '../../edit_todo/edit_todo.dart';
 import '../todos_voerview.dart';
 import 'package:todos_repository/todos_repository.dart';
@@ -16,9 +17,9 @@ class _TodosOverviewPageState extends State<TodosOverviewPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => TodosOverviewBloc(
-        todosRepository: context.read<TodosRepository>(),
-      )..add(const TodosOverviewSubscriptionRequested()),
+      create: (context) =>
+          TodosOverviewBloc(todosRepository: context.read<TodosRepository>())
+            ..add(const TodosOverviewSubscriptionRequested()),
       child: const TodosOverviewView(),
     );
   }
@@ -29,9 +30,11 @@ class TodosOverviewView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('我的待办'),
+        title: Text(l10n.todosOverviewAppBarTitle),
         actions: const [
           TodosOverviewFilterButton(),
           TodosOverviewOptionsButton(),
@@ -47,8 +50,8 @@ class TodosOverviewView extends StatelessWidget {
                 ScaffoldMessenger.of(context)
                   ..hideCurrentSnackBar()
                   ..showSnackBar(
-                    const SnackBar(
-                      content: Text('待办错误信息'),
+                    SnackBar(
+                      content: Text(l10n.todosOverviewErrorSnackbarText),
                     ),
                   );
               }
@@ -59,25 +62,24 @@ class TodosOverviewView extends StatelessWidget {
                 previous.lastDeletedTodo != current.lastDeletedTodo &&
                 current.lastDeletedTodo != null,
             listener: (context, state) {
-              // final deletedTodo = state.lastDeletedTodo!;
+              final deletedTodo = state.lastDeletedTodo!;
               final messenger = ScaffoldMessenger.of(context);
               messenger
                 ..hideCurrentSnackBar()
                 ..showSnackBar(
                   SnackBar(
-                    content: const Text(
-                      // l10n.todosOverviewTodoDeletedSnackbarText(
-                      //   deletedTodo.title,
-                      // ),
-                      '删除指定待办',
+                    content: Text(
+                      l10n.todosOverviewTodoDeletedSnackbarText(
+                        deletedTodo.title,
+                      ),
                     ),
                     action: SnackBarAction(
-                      label: '撤销',
+                      label: l10n.todosOverviewUndoDeletionButtonText,
                       onPressed: () {
                         messenger.hideCurrentSnackBar();
                         context.read<TodosOverviewBloc>().add(
-                              const TodosOverviewUndoDeletionRequested(),
-                            );
+                          const TodosOverviewUndoDeletionRequested(),
+                        );
                       },
                     ),
                   ),
@@ -95,7 +97,7 @@ class TodosOverviewView extends StatelessWidget {
               } else {
                 return Center(
                   child: Text(
-                    '暂无待办',
+                    l10n.todosOverviewEmptyText,
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 );
@@ -111,21 +113,21 @@ class TodosOverviewView extends StatelessWidget {
                     todo: todo,
                     onToggleCompleted: (isCompleted) {
                       context.read<TodosOverviewBloc>().add(
-                            TodosOverviewTodoCompletionToggled(
-                              todo: todo,
-                              isCompleted: isCompleted,
-                            ),
-                          );
+                        TodosOverviewTodoCompletionToggled(
+                          todo: todo,
+                          isCompleted: isCompleted,
+                        ),
+                      );
                     },
                     onDismissed: (_) {
                       context.read<TodosOverviewBloc>().add(
-                            TodosOverviewTodoDeleted(todo),
-                          );
+                        TodosOverviewTodoDeleted(todo),
+                      );
                     },
                     onTap: () {
-                      Navigator.of(context).push(
-                        EditTodoPage.route(initialTodo: todo),
-                      );
+                      Navigator.of(
+                        context,
+                      ).push(EditTodoPage.route(initialTodo: todo));
                     },
                   );
                 },

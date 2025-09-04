@@ -30,29 +30,23 @@ class AppThemeFactory {
         centerTitle: true,
       ),
       scaffoldBackgroundColor: themeColors.backgroundColor,
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: themeColors.surfaceColor,
         elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: seedColor,
           foregroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
       ),
       snackBarTheme: const SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
       ),
       inputDecorationTheme: InputDecorationTheme(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
         filled: true,
         fillColor: Colors.grey[50],
       ),
@@ -82,29 +76,23 @@ class AppThemeFactory {
         centerTitle: true,
       ),
       scaffoldBackgroundColor: themeColors.backgroundColor,
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: themeColors.surfaceColor,
         elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: seedColor,
           foregroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
       ),
       snackBarTheme: const SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
       ),
       inputDecorationTheme: InputDecorationTheme(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
         filled: true,
         fillColor: Colors.grey[800],
       ),
@@ -144,14 +132,8 @@ class AppThemeFactory {
     Color? primaryColor,
   }) {
     return brightness == Brightness.light
-        ? createLightTheme(
-            colors: lightColors,
-            primaryColor: primaryColor,
-          )
-        : createDarkTheme(
-            colors: darkColors,
-            primaryColor: primaryColor,
-          );
+        ? createLightTheme(colors: lightColors, primaryColor: primaryColor)
+        : createDarkTheme(colors: darkColors, primaryColor: primaryColor);
   }
 
   /// Get theme colors based on brightness

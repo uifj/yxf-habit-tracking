@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:yxf_habit_tracking_app/app/l10n/l10n.dart';
 import '../todos_voerview.dart';
 
 @visibleForTesting
@@ -10,6 +11,8 @@ class TodosOverviewOptionsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     final todos = context.select((TodosOverviewBloc bloc) => bloc.state.todos);
     final hasTodos = todos.isNotEmpty;
     final completedTodosAmount = todos.where((todo) => todo.isCompleted).length;
@@ -18,17 +21,17 @@ class TodosOverviewOptionsButton extends StatelessWidget {
       shape: const ContinuousRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(16)),
       ),
-      tooltip: 'todosOverviewOptionsTooltip',
+      tooltip: l10n.todosOverviewOptionsTooltip,
       onSelected: (options) {
         switch (options) {
           case TodosOverviewOption.toggleAll:
             context.read<TodosOverviewBloc>().add(
-                  const TodosOverviewToggleAllRequested(),
-                );
+              const TodosOverviewToggleAllRequested(),
+            );
           case TodosOverviewOption.clearCompleted:
             context.read<TodosOverviewBloc>().add(
-                  const TodosOverviewClearCompletedRequested(),
-                );
+              const TodosOverviewClearCompletedRequested(),
+            );
         }
       },
       itemBuilder: (context) {
@@ -38,14 +41,14 @@ class TodosOverviewOptionsButton extends StatelessWidget {
             enabled: hasTodos,
             child: Text(
               completedTodosAmount == todos.length
-                  ? 'todosOverviewOptionsMarkAllIncomplete'
-                  : 'todosOverviewOptionsMarkAllComplete',
+                  ? l10n.todosOverviewOptionsMarkAllIncomplete
+                  : l10n.todosOverviewOptionsMarkAllComplete,
             ),
           ),
           PopupMenuItem(
             value: TodosOverviewOption.clearCompleted,
             enabled: hasTodos && completedTodosAmount > 0,
-            child: const Text('todosOverviewOptionsClearCompleted'),
+            child: Text(l10n.todosOverviewOptionsClearCompleted),
           ),
         ];
       },

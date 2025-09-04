@@ -3,10 +3,8 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  audioplayers_windows
   flutter_inappwebview_windows
   permission_handler_windows
-  tencent_cloud_chat_sdk
   url_launcher_windows
 )
 
