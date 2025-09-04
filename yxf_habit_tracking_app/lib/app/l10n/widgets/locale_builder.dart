@@ -107,7 +107,7 @@ class LanguageSelector extends StatelessWidget {
     return BlocBuilder<LocaleCubit, LocaleState>(
       builder: (context, state) {
         final localeCubit = context.read<LocaleCubit>();
-        
+
         if (isExpanded) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -159,12 +159,14 @@ class LanguageSelector extends StatelessWidget {
               localeCubit.setLanguage(value);
             }
           },
-          items: localeCubit.availableLanguages.map(
-            (language) => DropdownMenuItem(
-              value: language,
-              child: Text(language.displayName),
-            ),
-          ).toList(),
+          items: localeCubit.availableLanguages
+              .map(
+                (language) => DropdownMenuItem(
+                  value: language,
+                  child: Text(language.displayName),
+                ),
+              )
+              .toList(),
         );
       },
     );
@@ -186,7 +188,7 @@ class QuickLanguageSwitcher extends StatelessWidget {
     return BlocBuilder<LocaleCubit, LocaleState>(
       builder: (context, state) {
         final localeCubit = context.read<LocaleCubit>();
-        
+
         return Row(
           mainAxisSize: MainAxisSize.min,
           children: [

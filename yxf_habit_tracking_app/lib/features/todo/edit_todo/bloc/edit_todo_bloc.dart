@@ -18,7 +18,8 @@ class EditTodoBloc extends Bloc<EditTodoEvent, EditTodoState> {
             title: initialTodo?.title ?? '',
             description: initialTodo?.description ?? '',
             focusTime: initialTodo?.focusTime ?? 0,
-            createdAt: initialTodo?.createdAt ?? defaultCreatedAt ?? DateTime.now(),
+            createdAt:
+                initialTodo?.createdAt ?? defaultCreatedAt ?? DateTime.now(),
             parentTodoId: parentTodoId,
           ),
         ) {

@@ -38,7 +38,8 @@ class LocaleCubit extends Cubit<LocaleState> {
   /// Toggle between supported languages
   /// 在支持的语言间切换
   void toggleLanguage() {
-    final currentIndex = _config.supportedLanguages.indexOf(state.currentLanguage);
+    final currentIndex =
+        _config.supportedLanguages.indexOf(state.currentLanguage);
     final nextIndex = (currentIndex + 1) % _config.supportedLanguages.length;
     final nextLanguage = _config.supportedLanguages[nextIndex];
     setLanguage(nextLanguage);
@@ -49,7 +50,7 @@ class LocaleCubit extends Cubit<LocaleState> {
   void setSystemLocale() {
     final systemLocale = _getSystemLocale();
     final systemLanguage = _getLanguageFromLocale(systemLocale);
-    
+
     emit(state.copyWith(
       currentLanguage: systemLanguage,
       isSystemLocale: true,
@@ -82,7 +83,7 @@ class LocaleCubit extends Cubit<LocaleState> {
   void initializeWithSystemLocale() {
     final systemLocale = _getSystemLocale();
     final systemLanguage = _getLanguageFromLocale(systemLocale);
-    
+
     emit(LocaleState(
       currentLanguage: systemLanguage,
       isSystemLocale: true,
@@ -117,7 +118,7 @@ class LocaleCubit extends Cubit<LocaleState> {
         return language;
       }
     }
-    
+
     // If no exact match, return fallback
     return _config.fallbackLanguage;
   }

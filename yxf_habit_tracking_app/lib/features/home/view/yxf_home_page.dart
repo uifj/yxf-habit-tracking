@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:yxf_habit_tracking_app/app/l10n/l10n.dart';
 import 'package:yxf_habit_tracking_app/common/widgets/background/animated_background.dart';
 import 'package:intl/intl.dart';
 import 'package:todos_repository/todos_repository.dart';
@@ -20,10 +21,6 @@ class YxfHomePage extends StatefulWidget {
 }
 
 class _YxfHomePageState extends State<YxfHomePage> {
-  // 被选中的事件
-  late ValueNotifier<List<Todo>> _selectedEvents = ValueNotifier<List<Todo>>(
-    [],
-  );
   // 用于展示的日历格式(默认是当前这一个星期，可以切换为最近两个星期、当月)
   CalendarFormat _calendarFormat = CalendarFormat.week;
   // 点击两个日期变为选定日期范围
@@ -38,17 +35,33 @@ class _YxfHomePageState extends State<YxfHomePage> {
 
   // 初始化或查询时加载待办数据，没加载完就都是加载中
   bool isLoading = false;
+  // 被选中的事件
+  late final ValueNotifier<List<Todo>> _selectedEvents =
+      ValueNotifier<List<Todo>>(
+    [],
+  );
+  // 所有待办事件
   late List<Todo> todoList = [];
+
+  // 无限滚动相关
+  final ScrollController _scrollController = ScrollController();
+  bool _isLoadingMore = false;
+  bool _hasReachedMax = false;
+  int _currentPage = 0;
+  static const int _pageSize = 20; // 每页加载的待办数量
 
   @override
   void initState() {
     super.initState();
+    // 添加滚动监听
+    _scrollController.addListener(_onScroll);
     // 获取当前日期的事件
     _queryTodoList(_focusedDay);
   }
 
   @override
   void dispose() {
+    _scrollController.dispose();
     _selectedEvents.dispose();
     super.dispose();
   }
@@ -75,24 +88,30 @@ class _YxfHomePageState extends State<YxfHomePage> {
         todoList = todos;
         // 初始化时设定当前选中的日期就是聚焦的日期
         _selectedDay = _focusedDay;
-        // 获取当前日期的事件
-        _selectedEvents = ValueNotifier(_getTodosForADay(_selectedDay));
+        // 重置分页状态并加载第一页数据
+        _currentPage = 0;
+        _hasReachedMax = false;
         isLoading = false;
       });
+      // 加载第一页待办数据
+      _loadTodosForDay(_selectedDay, reset: true);
     } catch (e) {
       if (!mounted) return;
       setState(() {
         todoList = [];
         _selectedDay = _focusedDay;
-        _selectedEvents = ValueNotifier(_getTodosForADay(_selectedDay));
+        _currentPage = 0;
+        _hasReachedMax = false;
         isLoading = false;
       });
+      // 加载空数据
+      _selectedEvents.value = [];
     }
   }
 
-  List<Todo> _getTodosForADay(DateTime day) {
+  List<Todo> _getTodosForADay(DateTime day, {int? limit, int? offset}) {
     // 过滤出指定日期的根级别待办事项（没有parentTodoId的todos）
-    final dayTodos = todoList.where((todo) {
+    var dayTodos = todoList.where((todo) {
       final todoDate = DateTime(
         todo.createdAt.year,
         todo.createdAt.month,
@@ -101,6 +120,19 @@ class _YxfHomePageState extends State<YxfHomePage> {
       final targetDate = DateTime(day.year, day.month, day.day);
       return todoDate.isAtSameMomentAs(targetDate) && todo.parentTodoId == null;
     }).toList();
+
+    // 按创建时间排序（最新的在前）
+    dayTodos.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+
+    // 分页处理
+    if (limit != null && offset != null) {
+      final startIndex = offset;
+      final endIndex = (startIndex + limit).clamp(0, dayTodos.length);
+      if (startIndex >= dayTodos.length) {
+        return [];
+      }
+      dayTodos = dayTodos.sublist(startIndex, endIndex);
+    }
 
     // 为每个根级别todo构建完整的subtodos树
     return dayTodos.map((todo) => _buildTodoWithSubtodos(todo)).toList();
@@ -126,9 +158,13 @@ class _YxfHomePageState extends State<YxfHomePage> {
         _rangeStart = null;
         _rangeEnd = null;
         // _rangeSelectionMode = RangeSelectionMode.toggledOff;
+        // 重置分页状态
+        _currentPage = 0;
+        _hasReachedMax = false;
       });
     }
-    _selectedEvents.value = _getTodosForADay(selectedDay);
+    // 重新加载第一页数据
+    _loadTodosForDay(selectedDay, reset: true);
   }
 
   // 当某个日期被长按可以新增备注？？？
@@ -144,21 +180,24 @@ class _YxfHomePageState extends State<YxfHomePage> {
       _rangeStart = start;
       _rangeEnd = end;
       // _rangeSelectionMode = RangeSelectionMode.toggledOn;
+      // 重置分页状态
+      _currentPage = 0;
+      _hasReachedMax = false;
     });
 
     // 起止日期可能为null
     if (start != null && end != null) {
-      // 有起止，则获取该日期范围内所有的待办数据
+      // 有起止，则获取该日期范围内所有的待办数据（暂时不支持范围分页）
       _selectedEvents.value = [
-        for (final d in daysInRange(start, end))
-          ...(_selectedEvents.value = _getTodosForADay(d)),
+        for (final d in daysInRange(start, end)) ..._getTodosForADay(d),
       ];
+      _hasReachedMax = true; // 范围选择时禁用分页
     } else if (start != null) {
       // 只有起，则只获取该起日期的所有待办数据
-      _selectedEvents.value = _getTodosForADay(start);
+      _loadTodosForDay(start, reset: true);
     } else if (end != null) {
       // 只有止，则只获取该止日期的所有待办数据
-      _selectedEvents.value = _getTodosForADay(end);
+      _loadTodosForDay(end, reset: true);
     }
   }
 
@@ -279,6 +318,109 @@ class _YxfHomePageState extends State<YxfHomePage> {
         .then((_) => _queryTodoList(_focusedDay));
   }
 
+  // ========== 无限滚动相关方法 ==========
+
+  /// 滚动监听器
+  void _onScroll() {
+    if (_isBottom && !_isLoadingMore && !_hasReachedMax) {
+      _loadMoreTodos();
+    }
+  }
+
+  /// 检查是否滚动到底部
+  bool get _isBottom {
+    if (!_scrollController.hasClients) return false;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.offset;
+    return currentScroll >= (maxScroll * 0.9);
+  }
+
+  /// 加载指定日期的待办数据
+  void _loadTodosForDay(DateTime day, {bool reset = false}) {
+    if (reset) {
+      _currentPage = 0;
+      _hasReachedMax = false;
+      _selectedEvents.value = [];
+    }
+
+    final todos = _getTodosForADay(
+      day,
+      limit: _pageSize,
+      offset: _currentPage * _pageSize,
+    );
+
+    if (reset) {
+      _selectedEvents.value = todos;
+    } else {
+      _selectedEvents.value = [..._selectedEvents.value, ...todos];
+    }
+
+    // 检查是否已达到最大值
+    if (todos.length < _pageSize) {
+      _hasReachedMax = true;
+    }
+
+    if (!reset) {
+      _currentPage++;
+    }
+  }
+
+  /// 加载更多待办数据
+  Future<void> _loadMoreTodos() async {
+    if (_isLoadingMore || _hasReachedMax) return;
+
+    setState(() {
+      _isLoadingMore = true;
+    });
+
+    try {
+      // 模拟网络延迟
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      _currentPage++;
+      final moreTodos = _getTodosForADay(
+        _selectedDay,
+        limit: _pageSize,
+        offset: _currentPage * _pageSize,
+      );
+
+      if (moreTodos.isEmpty || moreTodos.length < _pageSize) {
+        _hasReachedMax = true;
+      }
+
+      if (moreTodos.isNotEmpty) {
+        _selectedEvents.value = [..._selectedEvents.value, ...moreTodos];
+      }
+    } catch (e) {
+      debugPrint('加载更多待办失败: $e');
+      _currentPage--; // 回滚页码
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoadingMore = false;
+        });
+      }
+    }
+  }
+
+  /// 构建底部加载指示器
+  Widget _buildBottomLoader() {
+    return Container(
+      alignment: Alignment.center,
+      padding: const EdgeInsets.all(16.0),
+      child: _isLoadingMore
+          ? const CupertinoActivityIndicator()
+          : _hasReachedMax
+              ? Text(
+                  '已加载全部待办',
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Colors.grey[600],
+                      ),
+                )
+              : const SizedBox.shrink(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBackground(
@@ -302,7 +444,7 @@ class _YxfHomePageState extends State<YxfHomePage> {
   TableCalendar<Object?> _buildTodoCalender() {
     return TableCalendar(
       // locale: box.read('language') == 'en' ? "en_US" : 'zh_CN',
-      locale: "zh_CN", // 暂时使用中文，"en_US"待定
+      locale: context.isEnglish ? 'en_US' : 'zh_CN', // 暂时使用中文，"en_US"待定
       firstDay: kFirstDay,
       lastDay: kLastDay,
       focusedDay: _focusedDay,
@@ -321,9 +463,9 @@ class _YxfHomePageState extends State<YxfHomePage> {
         outsideDaysVisible: false,
       ),
       availableCalendarFormats: const {
-        CalendarFormat.month: "月",
-        CalendarFormat.twoWeeks: "双周",
-        CalendarFormat.week: "周",
+        CalendarFormat.month: "展示月",
+        // CalendarFormat.twoWeeks: "双周",
+        CalendarFormat.week: "展示周",
       },
       // 自定义修改日历的样式
       calendarBuilders: CalendarBuilders(
@@ -463,10 +605,17 @@ class _YxfHomePageState extends State<YxfHomePage> {
                 }
 
                 return CupertinoScrollbar(
+                  controller: _scrollController,
                   child: ListView.builder(
+                    controller: _scrollController,
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    itemCount: todos.length,
+                    itemCount: _hasReachedMax ? todos.length : todos.length + 1,
                     itemBuilder: (context, index) {
+                      // 如果是最后一项且未达到最大值，显示加载指示器
+                      if (index >= todos.length) {
+                        return _buildBottomLoader();
+                      }
+
                       final todo = todos[index];
                       return TodoListTile(
                         todo: todo,
@@ -479,8 +628,33 @@ class _YxfHomePageState extends State<YxfHomePage> {
                         onTap: () {
                           _toggleSubtodosExpanded(todo);
                         },
+                        onLongPress: () {
+                          Navigator.of(context)
+                              .push(
+                                EditTodoPage.route(initialTodo: todo),
+                              )
+                              .then((_) => _queryTodoList(_focusedDay));
+                        },
                         onAddSubTodo: () {
                           _addSubTodo(todo);
+                        },
+                        // 子待办专用回调方法
+                        onSubtodoToggleCompleted: (subtodo) async {
+                          await _toggleTodoCompleted(
+                              subtodo, subtodo.isCompleted);
+                        },
+                        onSubtodoDismissed: (subtodo) async {
+                          await _deleteTodo(subtodo);
+                        },
+                        onSubtodoTap: (subtodo) {
+                          _toggleSubtodosExpanded(subtodo);
+                        },
+                        onSubtodoLongPress: (subtodo) {
+                          Navigator.of(context)
+                              .push(
+                                EditTodoPage.route(initialTodo: subtodo),
+                              )
+                              .then((_) => _queryTodoList(_focusedDay));
                         },
                       );
                     },

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../cubit/theme_cubit.dart';
-import '../models/theme_models.dart';
 
 /// Extension on BuildContext for easy theme access
 /// BuildContext的主题扩展，便于访问主题
@@ -55,7 +54,7 @@ extension ThemeDataExtension on ThemeData {
   /// Get surface variant color with fallback
   /// 获取表面变体颜色（带回退）
   Color get surfaceVariant {
-    return colorScheme.surfaceVariant;
+    return colorScheme.surfaceContainerHighest;
   }
 
   /// Get outline color with fallback
@@ -98,7 +97,7 @@ extension ColorSchemeExtension on ColorScheme {
 
   /// Get shadow color
   /// 获取阴影颜色
-  Color get shadow => brightness == Brightness.dark 
+  Color get shadow => brightness == Brightness.dark
       ? Colors.black.withOpacity(0.5)
       : Colors.black.withOpacity(0.2);
 }
@@ -109,23 +108,23 @@ extension TextThemeExtension on TextTheme {
   /// Get caption text style (deprecated in Material 3, but useful)
   /// 获取说明文字样式（Material 3中已弃用，但仍有用）
   TextStyle? get caption => bodySmall?.copyWith(
-    fontSize: 12,
-    fontWeight: FontWeight.w400,
-  );
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+      );
 
   /// Get overline text style (deprecated in Material 3, but useful)
   /// 获取上划线文字样式（Material 3中已弃用，但仍有用）
   TextStyle? get overline => labelSmall?.copyWith(
-    fontSize: 10,
-    fontWeight: FontWeight.w400,
-    letterSpacing: 1.5,
-  );
+        fontSize: 10,
+        fontWeight: FontWeight.w400,
+        letterSpacing: 1.5,
+      );
 
   /// Get button text style
   /// 获取按钮文字样式
   TextStyle? get button => labelLarge?.copyWith(
-    fontWeight: FontWeight.w500,
-  );
+        fontWeight: FontWeight.w500,
+      );
 }
 
 /// Utility class for theme-related constants
