@@ -10,7 +10,7 @@ part 'todo.g.dart';
 /// A single `todo` item.
 ///
 /// Contains a [title], [description] and [id], in addition to a [isCompleted]
-/// flag.
+/// flag, [focusTime], [createdAt], [subtodos], [subtodosExpanded] and [parentTodoId].
 ///
 /// If an [id] is provided, it cannot be empty. If no [id] is provided, one
 /// will be generated.
@@ -28,11 +28,17 @@ class Todo extends Equatable {
     String? id,
     this.description = '',
     this.isCompleted = false,
-  }) : assert(
-         id == null || id.isNotEmpty,
-         'id must either be null or not empty',
-       ),
-       id = id ?? const Uuid().v4();
+    this.focusTime = 0,
+    DateTime? createdAt,
+    this.subtodos = const [],
+    this.subtodosExpanded = false,
+    this.parentTodoId,
+  })  : assert(
+          id == null || id.isNotEmpty,
+          'id must either be null or not empty',
+        ),
+        id = id ?? const Uuid().v4(),
+        createdAt = createdAt ?? DateTime.now();
 
   /// The unique identifier of the `todo`.
   ///
@@ -54,6 +60,31 @@ class Todo extends Equatable {
   /// Defaults to `false`.
   final bool isCompleted;
 
+  // Focus time in minutes for this `todo`.
+  ///
+  /// Defaults to `0`.
+  final int focusTime;
+
+  /// The creation date and time of the `todo`.
+  ///
+  /// Defaults to current time when created.
+  final DateTime createdAt;
+
+  // List of sub`todo`s for this `todo`.
+  ///
+  /// Defaults to empty list.
+  final List<Todo> subtodos;
+
+  /// Whether the subtodos are expanded in UI.
+  ///
+  /// Defaults to `false`.
+  final bool subtodosExpanded;
+
+  // The parent `todo` ID if this is a sub`todo`.
+  ///
+  /// Can be null for root todos.
+  final String? parentTodoId;
+
   /// Returns a copy of this `todo` with the given values updated.
   ///
   /// {@macro todo_item}
@@ -62,12 +93,22 @@ class Todo extends Equatable {
     String? title,
     String? description,
     bool? isCompleted,
+    int? focusTime,
+    DateTime? createdAt,
+    List<Todo>? subtodos,
+    bool? subtodosExpanded,
+    String? parentTodoId,
   }) {
     return Todo(
       id: id ?? this.id,
       title: title ?? this.title,
       description: description ?? this.description,
       isCompleted: isCompleted ?? this.isCompleted,
+      focusTime: focusTime ?? this.focusTime,
+      createdAt: createdAt ?? this.createdAt,
+      subtodos: subtodos ?? this.subtodos,
+      subtodosExpanded: subtodosExpanded ?? this.subtodosExpanded,
+      parentTodoId: parentTodoId ?? this.parentTodoId,
     );
   }
 
@@ -78,5 +119,15 @@ class Todo extends Equatable {
   JsonMap toJson() => _$TodoToJson(this);
 
   @override
-  List<Object> get props => [id, title, description, isCompleted];
+  List<Object?> get props => [
+        id,
+        title,
+        description,
+        isCompleted,
+        focusTime,
+        createdAt,
+        subtodos,
+        subtodosExpanded,
+        parentTodoId,
+      ];
 }

@@ -1,8 +1,10 @@
 import 'package:todos_api/todos_api.dart';
 
+/// 实例化存储库,用来从 data层中获取数据
 /// {@template todos_repository}
-/// A repository that handles `todo` related requests.
+// A repository that handles `todo` related requests.
 /// {@endtemplate}
+
 class TodosRepository {
   /// {@macro todos_repository}
   const TodosRepository({

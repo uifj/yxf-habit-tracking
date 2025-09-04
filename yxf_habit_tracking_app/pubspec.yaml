@@ -25,11 +25,11 @@ dependencies:
 
 
   local_storage_todos_api:
-    path: packages/local_storage_todos_api
+    path: packages/todo/local_storage_todos_api
   todos_api:
-    path: packages/todos_api
+    path: packages/todo/todos_api
   todos_repository:
-    path: packages/todos_repository
+    path: packages/todo/todos_repository
   tencent_cloud_chat_common:
     path: modules/tencent_cloud_chat_common
   package_info_plus: ^8.3.1
