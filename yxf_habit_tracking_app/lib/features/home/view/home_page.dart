@@ -4,7 +4,7 @@ import '../../todo/edit_todo/edit_todo.dart';
 import '../home.dart';
 import '../../todo/stats/stats.dart';
 import '../../todo/todo_overview/todos_voerview.dart';
-import 'yxf_home_page.dart';
+import '../../settings/view/settings_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -28,7 +28,12 @@ class HomeView extends StatelessWidget {
     return Scaffold(
       body: IndexedStack(
         index: selectedTab.index,
-        children: const [YxfHomePage(), TodosOverviewPage(), StatsPage()],
+        children: const [
+          YxfHomePage(),
+          TodosOverviewPage(),
+          StatsPage(),
+          SettingsPage()
+        ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
@@ -58,6 +63,11 @@ class HomeView extends StatelessWidget {
               groupValue: selectedTab,
               value: HomeTab.stats,
               icon: const Icon(Icons.show_chart_rounded),
+            ),
+            _HomeTabButton(
+              groupValue: selectedTab,
+              value: HomeTab.settings,
+              icon: const Icon(Icons.settings_rounded),
             ),
           ],
         ),

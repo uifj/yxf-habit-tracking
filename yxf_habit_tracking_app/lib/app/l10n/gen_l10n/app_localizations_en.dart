@@ -1,15 +1,11 @@
-// ignore: unused_import
-import 'package:intl/intl.dart' as intl;
 import 'app_localizations.dart';
-
-// ignore_for_file: type=lint
 
 /// The translations for English (`en`).
 class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get todosOverviewAppBarTitle => 'Flutter Todos';
+  String get todosOverviewAppBarTitle => 'Todos';
 
   @override
   String get todosOverviewFilterTooltip => 'Filter';
@@ -30,8 +26,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get todosOverviewClearCompletedButtonText => 'Clear completed';
 
   @override
-  String get todosOverviewEmptyText =>
-      'No todos found with the selected filters.';
+  String get todosOverviewEmptyText => 'No todos found with the selected filters.';
 
   @override
   String todosOverviewTodoDeletedSnackbarText(Object todoTitle) {
@@ -42,8 +37,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get todosOverviewUndoDeletionButtonText => 'Undo';
 
   @override
-  String get todosOverviewErrorSnackbarText =>
-      'An error occurred while loading todos.';
+  String get todosOverviewErrorSnackbarText => 'An error occurred while loading todos.';
 
   @override
   String get todosOverviewOptionsTooltip => 'Options';

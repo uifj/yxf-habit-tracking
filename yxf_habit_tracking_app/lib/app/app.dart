@@ -14,9 +14,27 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider<TodosRepository>(
-      create: (_) => createTodosRepository(),
-      dispose: (repository) => repository.dispose(),
+    return MultiBlocProvider(
+      providers: [
+        RepositoryProvider<TodosRepository>(
+          create: (_) => createTodosRepository(),
+          // dispose: (repository) => repository.dispose(),
+        ),
+        // Add LocaleCubit for language management
+        // 添加LocaleCubit用于语言管理
+        BlocProvider(
+          create: (context) => LocaleCubit()
+            ..initializeWithSystemLocale(), // Initialize with system locale
+        ),
+        // Add ThemeCubit for theme management
+        // 添加ThemeCubit用于主题管理
+        BlocProvider(
+          create: (context) => ThemeCubit()
+            ..setSystemTheme() // Initialize with system theme
+            ..setPrimaryColor(
+                const Color(0xFF13B9FF)), // Set default primary color
+        ),
+      ],
       child: const AppView(),
     );
   }
@@ -27,12 +45,25 @@ class AppView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: FlutterTodosTheme.light,
-      darkTheme: FlutterTodosTheme.dark,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      home: const HomePage(),
+    return LocaleBuilder(
+      builder: (context, locale, supportedLocales) {
+        return ThemeBuilder(
+          builder: (context, lightTheme, darkTheme, themeMode) {
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              // Theme configuration
+              theme: lightTheme,
+              darkTheme: darkTheme,
+              themeMode: themeMode,
+              // Locale configuration
+              locale: locale,
+              supportedLocales: supportedLocales,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              home: const HomePage(),
+            );
+          },
+        );
+      },
     );
   }
 }

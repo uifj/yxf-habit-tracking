@@ -10,6 +10,8 @@ import '../../todo/todo_overview/todos_voerview.dart';
 import '../../todo/todo_overview/widgets/todo_list_tile.dart';
 import '../../todo/edit_todo/edit_todo.dart';
 
+import 'package:yxf_habit_tracking_app/app/theme/theme.dart';
+
 class YxfHomePage extends StatefulWidget {
   const YxfHomePage({super.key});
 
@@ -242,9 +244,8 @@ class _YxfHomePageState extends State<YxfHomePage> {
     final todosRepository = context.read<TodosRepository>();
 
     // 找到所有直接子待办
-    final directSubtodos = todoList
-        .where((todo) => todo.parentTodoId == parentId)
-        .toList();
+    final directSubtodos =
+        todoList.where((todo) => todo.parentTodoId == parentId).toList();
 
     for (final subtodo in directSubtodos) {
       // 递归删除子待办的子待办
@@ -281,6 +282,7 @@ class _YxfHomePageState extends State<YxfHomePage> {
   @override
   Widget build(BuildContext context) {
     return AnimatedBackground(
+      isDarkMode: context.read<ThemeCubit>().state.themeMode == ThemeMode.dark,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
@@ -381,8 +383,8 @@ class _YxfHomePageState extends State<YxfHomePage> {
                 Text(
                   '${DateFormat('MM月dd日', 'zh_CN').format(_selectedDay)} 的待办',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
                 const Spacer(),
                 IconButton(
@@ -442,13 +444,17 @@ class _YxfHomePageState extends State<YxfHomePage> {
                         const SizedBox(height: 16),
                         Text(
                           '暂无待办事项',
-                          style: Theme.of(context).textTheme.bodyLarge
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge
                               ?.copyWith(color: Colors.grey[600]),
                         ),
                         const SizedBox(height: 8),
                         Text(
                           '点击右上角 + 号添加新的待办',
-                          style: Theme.of(context).textTheme.bodySmall
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
                               ?.copyWith(color: Colors.grey[500]),
                         ),
                       ],
