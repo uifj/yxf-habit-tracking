@@ -30,7 +30,7 @@ class AppThemeFactory {
         centerTitle: true,
       ),
       scaffoldBackgroundColor: themeColors.backgroundColor,
-      cardTheme: CardThemeData(
+      cardTheme: CardTheme(
         color: themeColors.surfaceColor,
         elevation: 2,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -76,7 +76,7 @@ class AppThemeFactory {
         centerTitle: true,
       ),
       scaffoldBackgroundColor: themeColors.backgroundColor,
-      cardTheme: CardThemeData(
+      cardTheme: CardTheme(
         color: themeColors.surfaceColor,
         elevation: 2,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

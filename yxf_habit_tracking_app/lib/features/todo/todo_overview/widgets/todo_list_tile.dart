@@ -35,6 +35,12 @@ class TodoListTile extends StatelessWidget {
     final theme = Theme.of(context);
     final captionColor = theme.textTheme.bodySmall?.color;
 
+    // 计算子待办完成状态
+    final completedSubtodos =
+        todo.subtodos.where((subtodo) => subtodo.isCompleted).length;
+    final totalSubtodos = todo.subtodos.length;
+    final hasSubtodos = totalSubtodos > 0 && todo.parentTodoId == null;
+
     return Dismissible(
       key: Key('todoListTile_dismissible_${todo.id}'),
       onDismissed: onDismissed,
@@ -55,16 +61,50 @@ class TodoListTile extends StatelessWidget {
             child: ListTile(
               onLongPress: onLongPress,
               onTap: onTap,
-              title: Text(
-                todo.title,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: !todo.isCompleted
-                    ? null
-                    : TextStyle(
-                        color: captionColor,
-                        decoration: TextDecoration.lineThrough,
+              title: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      todo.title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: !todo.isCompleted
+                          ? null
+                          : TextStyle(
+                              color: captionColor,
+                              decoration: TextDecoration.lineThrough,
+                            ),
+                    ),
+                  ),
+                  if (hasSubtodos)
+                    Container(
+                      margin: const EdgeInsets.only(left: 8),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: completedSubtodos == totalSubtodos
+                            ? Colors.green.withOpacity(0.2)
+                            : Colors.orange.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: completedSubtodos == totalSubtodos
+                              ? Colors.green.withOpacity(0.5)
+                              : Colors.orange.withOpacity(0.5),
+                          width: 1,
+                        ),
                       ),
+                      child: Text(
+                        '$completedSubtodos/$totalSubtodos',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w500,
+                          color: completedSubtodos == totalSubtodos
+                              ? Colors.green.shade700
+                              : Colors.orange.shade700,
+                        ),
+                      ),
+                    ),
+                ],
               ),
               subtitle: Text(
                 todo.description,

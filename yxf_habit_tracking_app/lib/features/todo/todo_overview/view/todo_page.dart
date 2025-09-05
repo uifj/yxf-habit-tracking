@@ -199,134 +199,6 @@ class _TodoPageState extends State<TodoPage> {
     }
   }
 
-  // 切换待办完成状态
-  Future<void> _toggleTodoCompleted(Todo todo, bool isCompleted) async {
-    try {
-      context.read<TodosOverviewBloc>().add(
-        TodosOverviewTodoCompletionToggled(
-          todo: todo,
-          isCompleted: isCompleted,
-        ),
-      );
-      _queryTodoList(_focusedDay);
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('更新待办失败')));
-      }
-    }
-  }
-
-  // 删除待办（根据是否有parentTodoId决定删除逻辑）
-  Future<void> _deleteTodo(Todo todo) async {
-    try {
-      // final todosRepository = context.read<TodosRepository>();
-
-      if (todo.parentTodoId != null) {
-        // 如果是子待办，只删除自己
-        await _deleteSubTodo(todo);
-      } else {
-        // 如果是根待办，删除自己及所有子待办
-        await _deleteRootTodoWithSubtodos(todo);
-      }
-
-      _queryTodoList(_focusedDay);
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('已删除「${todo.title}」'),
-            action: SnackBarAction(
-              label: '撤销',
-              onPressed: () async {
-                try {
-                  // await todosRepository.saveTodo(todo);
-                  context.read<TodosOverviewBloc>().add(
-                    const TodosOverviewUndoDeletionRequested(),
-                  );
-                  _queryTodoList(_focusedDay);
-                } catch (e) {
-                  if (mounted) {
-                    ScaffoldMessenger.of(
-                      context,
-                    ).showSnackBar(const SnackBar(content: Text('撤销失败')));
-                  }
-                }
-              },
-            ),
-          ),
-        );
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('删除待办失败')));
-      }
-    }
-  }
-
-  // 删除单个子待办
-  Future<void> _deleteSubTodo(Todo subtodo) async {
-    // final todosRepository = context.read<TodosRepository>();
-    // await todosRepository.deleteTodo(subtodo.id);
-    context.read<TodosOverviewBloc>().add(TodosOverviewTodoDeleted(subtodo));
-  }
-
-  // 删除根待办及其所有子待办
-  Future<void> _deleteRootTodoWithSubtodos(Todo rootTodo) async {
-    // final todosRepository = context.read<TodosRepository>();
-
-    // 递归删除所有子待办
-    await _deleteAllSubtodos(rootTodo.id);
-
-    // 删除根待办
-    // await todosRepository.deleteTodo(rootTodo.id);
-    context.read<TodosOverviewBloc>().add(TodosOverviewTodoDeleted(rootTodo));
-  }
-
-  // 递归删除所有子待办
-  Future<void> _deleteAllSubtodos(String parentId) async {
-    // final todosRepository = context.read<TodosRepository>();
-
-    // 找到所有直接子待办
-    final directSubtodos = todoList
-        .where((todo) => todo.parentTodoId == parentId)
-        .toList();
-
-    for (final subtodo in directSubtodos) {
-      // 递归删除子待办的子待办
-      // await _deleteAllSubtodos(subtodo.id);
-      // 删除当前子待办
-      // await todosRepository.deleteTodo(subtodo.id);
-      context.read<TodosOverviewBloc>().add(TodosOverviewTodoDeleted(subtodo));
-    }
-  }
-
-  // 切换子待办展开状态
-  Future<void> _toggleSubtodosExpanded(Todo todo) async {
-    try {
-      final todosRepository = context.read<TodosRepository>();
-      await todosRepository.saveTodo(
-        todo.copyWith(subtodosExpanded: !todo.subtodosExpanded),
-      );
-      _queryTodoList(_focusedDay);
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('更新展开状态失败')));
-      }
-    }
-  }
-
-  // 添加子待办
-  void _addSubTodo(Todo parentTodo) {
-    Navigator.of(context)
-        .push(EditTodoPage.route(parentTodoId: parentTodo.id))
-        .then((_) => _queryTodoList(_focusedDay));
-  }
-
   // ========== 无限滚动相关方法 ==========
 
   /// 滚动监听器
@@ -420,13 +292,13 @@ class _TodoPageState extends State<TodoPage> {
       child: _isLoadingMore
           ? const CupertinoActivityIndicator()
           : _hasReachedMax
-          ? Text(
-              '已加载全部待办',
-              style: Theme.of(
-                context,
-              ).textTheme.bodySmall?.copyWith(color: Colors.grey[600]),
-            )
-          : const SizedBox.shrink(),
+              ? Text(
+                  '已加载全部待办',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(color: Colors.grey[600]),
+                )
+              : const SizedBox.shrink(),
     );
   }
 
@@ -476,6 +348,20 @@ class _TodoPageState extends State<TodoPage> {
                   }
                 },
               ),
+              // 监听todos数据变化，自动同步本地状态
+              BlocListener<TodosOverviewBloc, TodosOverviewState>(
+                listenWhen: (previous, current) =>
+                    previous.todos != current.todos,
+                listener: (context, state) {
+                  if (mounted) {
+                    setState(() {
+                      todoList = state.todos;
+                    });
+                    // 重新加载当前选中日期的待办数据
+                    _loadTodosForDay(_selectedDay, reset: true);
+                  }
+                },
+              ),
               BlocListener<TodosOverviewBloc, TodosOverviewState>(
                 listenWhen: (previous, current) =>
                     previous.lastDeletedTodo != current.lastDeletedTodo &&
@@ -497,8 +383,8 @@ class _TodoPageState extends State<TodoPage> {
                           onPressed: () {
                             messenger.hideCurrentSnackBar();
                             context.read<TodosOverviewBloc>().add(
-                              const TodosOverviewUndoDeletionRequested(),
-                            );
+                                  const TodosOverviewUndoDeletionRequested(),
+                                );
                           },
                         ),
                       ),
@@ -602,8 +488,8 @@ class _TodoPageState extends State<TodoPage> {
                 Text(
                   '${DateFormat('MM月dd日', 'zh_CN').format(_selectedDay)} 的待办',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
                 const Spacer(),
                 IconButton(
@@ -663,13 +549,17 @@ class _TodoPageState extends State<TodoPage> {
                         const SizedBox(height: 16),
                         Text(
                           '暂无待办事项',
-                          style: Theme.of(context).textTheme.bodyLarge
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge
                               ?.copyWith(color: Colors.grey[600]),
                         ),
                         const SizedBox(height: 8),
                         Text(
                           '点击右上角 + 号添加新的待办',
-                          style: Theme.of(context).textTheme.bodySmall
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
                               ?.copyWith(color: Colors.grey[500]),
                         ),
                       ],
@@ -684,9 +574,8 @@ class _TodoPageState extends State<TodoPage> {
                       return ListView.builder(
                         controller: _scrollController,
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        itemCount: _hasReachedMax
-                            ? todos.length
-                            : todos.length + 1,
+                        itemCount:
+                            _hasReachedMax ? todos.length : todos.length + 1,
                         itemBuilder: (context, index) {
                           // 如果是最后一项且未达到最大值，显示加载指示器
                           if (index >= todos.length) {
@@ -696,14 +585,36 @@ class _TodoPageState extends State<TodoPage> {
                           final todo = todos[index];
                           return TodoListTile(
                             todo: todo,
-                            onToggleCompleted: (isCompleted) async {
-                              await _toggleTodoCompleted(todo, isCompleted);
+                            onToggleCompleted: (isCompleted) {
+                              context.read<TodosOverviewBloc>().add(
+                                    TodosOverviewTodoCompletionToggled(
+                                      todo: todo,
+                                      isCompleted: isCompleted,
+                                    ),
+                                  );
                             },
-                            onDismissed: (_) async {
-                              await _deleteTodo(todo);
+                            onDismissed: (_) {
+                              context.read<TodosOverviewBloc>().add(
+                                    TodosOverviewTodoDeleted(todo),
+                                  );
+                              // // 找到所有直接子待办
+                              // final directSubtodos = todoList
+                              //     .where((todo) => todo.parentTodoId == todo.id)
+                              //     .toList();
+
+                              // for (final subtodo in directSubtodos) {
+                              //   // 递归删除当前子待办
+                              //   context
+                              //       .read<TodosOverviewBloc>()
+                              //       .add(TodosOverviewTodoDeleted(subtodo));
+                              // }
                             },
                             onTap: () {
-                              _toggleSubtodosExpanded(todo);
+                              context.read<TodosOverviewBloc>().add(
+                                    TodosOverviewSubtodoExpansionToggled(
+                                      todo,
+                                    ),
+                                  );
                             },
                             onLongPress: () {
                               Navigator.of(context)
@@ -711,20 +622,29 @@ class _TodoPageState extends State<TodoPage> {
                                   .then((_) => _queryTodoList(_focusedDay));
                             },
                             onAddSubTodo: () {
-                              _addSubTodo(todo);
+                              Navigator.of(context).push(
+                                  EditTodoPage.route(parentTodoId: todo.id));
                             },
                             // 子待办专用回调方法
-                            onSubtodoToggleCompleted: (subtodo) async {
-                              await _toggleTodoCompleted(
-                                subtodo,
-                                subtodo.isCompleted,
-                              );
+                            onSubtodoToggleCompleted: (subtodo) {
+                              context.read<TodosOverviewBloc>().add(
+                                    TodosOverviewTodoCompletionToggled(
+                                      todo: subtodo,
+                                      isCompleted: subtodo.isCompleted,
+                                    ),
+                                  );
                             },
                             onSubtodoDismissed: (subtodo) async {
-                              await _deleteTodo(subtodo);
+                              context.read<TodosOverviewBloc>().add(
+                                    TodosOverviewTodoDeleted(subtodo),
+                                  );
                             },
                             onSubtodoTap: (subtodo) {
-                              _toggleSubtodosExpanded(subtodo);
+                              context.read<TodosOverviewBloc>().add(
+                                    TodosOverviewSubtodoExpansionToggled(
+                                      subtodo,
+                                    ),
+                                  );
                             },
                             onSubtodoLongPress: (subtodo) {
                               Navigator.of(context)

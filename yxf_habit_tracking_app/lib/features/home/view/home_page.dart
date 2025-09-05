@@ -5,7 +5,7 @@ import '../home.dart';
 import '../../todo/stats/stats.dart';
 import '../../todo/todo_overview/todos_voerview.dart';
 import '../../settings/view/settings_page.dart';
-import 'yxf_home_page.dart';
+// import 'yxf_home_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -90,9 +90,8 @@ class _HomeTabButton extends StatelessWidget {
     return IconButton(
       onPressed: () => context.read<HomeCubit>().setTab(value),
       iconSize: 32,
-      color: groupValue != value
-          ? null
-          : Theme.of(context).colorScheme.secondary,
+      color:
+          groupValue != value ? null : Theme.of(context).colorScheme.secondary,
       icon: icon,
     );
   }

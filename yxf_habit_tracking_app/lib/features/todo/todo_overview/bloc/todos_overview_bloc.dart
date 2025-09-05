@@ -14,6 +14,7 @@ class TodosOverviewBloc extends Bloc<TodosOverviewEvent, TodosOverviewState> {
     on<TodosOverviewSubscriptionRequested>(_onSubscriptionRequested);
     on<TodosOverviewTodoCompletionToggled>(_onTodoCompletionToggled);
     on<TodosOverviewTodoDeleted>(_onTodoDeleted);
+    on<TodosOverviewSubtodoExpansionToggled>(_onSubtodoExpansionToggled);
     on<TodosOverviewUndoDeletionRequested>(_onUndoDeletionRequested);
     on<TodosOverviewFilterChanged>(_onFilterChanged);
     on<TodosOverviewToggleAllRequested>(_onToggleAllRequested);
@@ -53,7 +54,37 @@ class TodosOverviewBloc extends Bloc<TodosOverviewEvent, TodosOverviewState> {
     Emitter<TodosOverviewState> emit,
   ) async {
     emit(state.copyWith(lastDeletedTodo: () => event.todo));
+
+    // 如果删除的是父待办，需要先删除所有子待办
+    if (event.todo.parentTodoId == null) {
+      await _deleteAllSubtodos(event.todo.id);
+    }
+
+    // 删除当前待办
     await _todosRepository.deleteTodo(event.todo.id);
+  }
+
+  /// 递归删除所有子待办
+  Future<void> _deleteAllSubtodos(String parentId) async {
+    // 找到所有直接子待办
+    final directSubtodos =
+        state.todos.where((todo) => todo.parentTodoId == parentId).toList();
+
+    for (final subtodo in directSubtodos) {
+      // 递归删除子待办的子待办
+      await _deleteAllSubtodos(subtodo.id);
+      // 删除当前子待办
+      await _todosRepository.deleteTodo(subtodo.id);
+    }
+  }
+
+  Future<void> _onSubtodoExpansionToggled(
+    TodosOverviewSubtodoExpansionToggled event,
+    Emitter<TodosOverviewState> emit,
+  ) async {
+    final newTodo =
+        event.todo.copyWith(subtodosExpanded: !event.todo.subtodosExpanded);
+    await _todosRepository.saveTodo(newTodo);
   }
 
   Future<void> _onUndoDeletionRequested(

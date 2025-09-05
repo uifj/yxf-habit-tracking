@@ -37,6 +37,15 @@ final class TodosOverviewUndoDeletionRequested extends TodosOverviewEvent {
   const TodosOverviewUndoDeletionRequested();
 }
 
+final class TodosOverviewSubtodoExpansionToggled extends TodosOverviewEvent {
+  const TodosOverviewSubtodoExpansionToggled(this.todo);
+
+  final Todo todo;
+
+  @override
+  List<Object> get props => [todo];
+}
+
 class TodosOverviewFilterChanged extends TodosOverviewEvent {
   const TodosOverviewFilterChanged(this.filter);
 
