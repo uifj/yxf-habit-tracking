@@ -1,0 +1,856 @@
+[
+  {
+    "name": "_ready",
+    "trans": [
+      "准备方法",
+      "节点进入场景树时调用的初始化方法，常用于设置初始状态和获取节点引用"
+    ]
+  },
+  {
+    "name": "_process",
+    "trans": [
+      "处理帧方法",
+      "每帧调用的更新方法，适用于非物理相关的逻辑和动画"
+    ]
+  },
+  {
+    "name": "_physics_process",
+    "trans": [
+      "物理处理帧方法",
+      "每个物理步长调用的更新方法，适用于物理相关的移动和碰撞检测"
+    ]
+  },
+  {
+    "name": "_input",
+    "trans": [
+      "输入处理方法",
+      "处理输入事件的方法，接收InputEvent参数"
+    ]
+  },
+  {
+    "name": "_unhandled_input",
+    "trans": [
+      "未处理输入方法",
+      "处理未被其他节点处理的输入事件的方法"
+    ]
+  },
+  {
+    "name": "_draw",
+    "trans": [
+      "绘制方法",
+      "自定义2D绘制的方法，用于在CanvasItem上绘制图形和纹理"
+    ]
+  },
+  {
+    "name": "_on_body_entered",
+    "trans": [
+      "物体进入方法",
+      "当另一个物理体进入Area2D或RigidBody2D区域时调用的方法"
+    ]
+  },
+  {
+    "name": "_on_body_exited",
+    "trans": [
+      "物体退出方法",
+      "当另一个物理体离开Area2D或RigidBody2D区域时调用的方法"
+    ]
+  },
+  {
+    "name": "_on_area_entered",
+    "trans": [
+      "区域进入方法",
+      "当另一个区域进入Area2D区域时调用的方法"
+    ]
+  },
+  {
+    "name": "_on_area_exited",
+    "trans": [
+      "区域退出方法",
+      "当另一个区域离开Area2D区域时调用的方法"
+    ]
+  },
+  {
+    "name": "get_node",
+    "trans": [
+      "获取节点方法",
+      "通过路径获取场景树中的节点引用，常用简写形式$"
+    ]
+  },
+  {
+    "name": "add_child",
+    "trans": [
+      "添加子节点方法",
+      "将节点添加为当前节点的子节点"
+    ]
+  },
+  {
+    "name": "remove_child",
+    "trans": [
+      "移除子节点方法",
+      "从当前节点移除指定的子节点"
+    ]
+  },
+  {
+    "name": "instantiate",
+    "trans": [
+      "实例化方法",
+      "从PackedScene资源创建场景实例"
+    ]
+  },
+  {
+    "name": "queue_free",
+    "trans": [
+      "排队释放方法",
+     "安全地删除节点，在当前帧结束后释放资源"
+    ]
+  },
+  {
+    "name": "set_process",
+    "trans": [
+      "设置处理帧方法",
+      "启用或禁用_process方法的调用"
+    ]
+  },
+  {
+    "name": "set_physics_process",
+    "trans": [
+      "设置物理处理帧方法",
+      "启用或禁用_physics_process方法的调用"
+    ]
+  },
+  {
+    "name": "move_and_slide",
+    "trans": [
+      "移动并滑动方法",
+      "CharacterBody2D/3D的核心移动方法，处理碰撞和滑动"
+    ]
+  },
+  {
+    "name": "move_and_collide",
+    "trans": [
+      "移动并碰撞方法",
+      "更底层的移动方法，返回碰撞信息供进一步处理"
+    ]
+  },
+  {
+    "name": "is_action_just_pressed",
+    "trans": [
+      "检测动作刚按下方法",
+      "检测输入动作是否在本帧刚刚按下"
+    ]
+  },
+  {
+    "name": "is_action_pressed",
+    "trans": [
+      "检测动作按下方法",
+      "检测输入动作是否处于按下状态"
+    ]
+  },
+  {
+    "name": "is_action_just_released",
+    "trans": [
+      "检测动作刚释放方法",
+      "检测输入动作是否在本帧刚刚释放"
+    ]
+  },
+  {
+    "name": "play",
+    "trans": [
+      "播放方法",
+      "播放AnimationPlayer的动画或AudioStreamPlayer的声音"
+    ]
+  },
+  {
+    "name": "stop",
+    "trans": [
+      "停止方法",
+      "停止AnimationPlayer的动画或AudioStreamPlayer的声音"
+    ]
+  },
+  {
+    "name": "connect",
+    "trans": [
+      "连接方法",
+      "将信号连接到目标方法，建立事件响应机制"
+    ]
+  },
+  {
+    "name": "disconnect",
+    "trans": [
+      "断开连接方法",
+      "断开信号与方法的连接"
+    ]
+  },
+  {
+    "name": "emit_signal",
+    "trans": [
+      "发射信号方法",
+      "手动触发自定义或内置信号"
+    ]
+  },
+  {
+    "name": "set_deferred",
+    "trans": [
+      "延迟设置方法",
+      "在安全的时间点设置属性值，避免在物理处理期间修改属性"
+    ]
+  },
+  {
+    "name": "call_deferred",
+    "trans": [
+      "延迟调用方法",
+      "在安全的时间点调用方法，避免在物理处理期间执行代码"
+    ]
+  },
+  {
+    "name": "get_tree",
+    "trans": [
+      "获取场景树方法",
+      "获取当前场景的场景树实例，用于管理场景和节点"
+    ]
+  },
+  {
+    "name": "change_scene_to_file",
+    "trans": [
+      "切换场景文件方法",
+      "切换到指定路径的场景文件"
+    ]
+  },
+  {
+    "name": "change_scene_to_packed",
+    "trans": [
+      "切换打包场景方法",
+      "切换到已加载的PackedScene场景"
+    ]
+  },
+  {
+    "name": "reload_current_scene",
+    "trans": [
+      "重新加载当前场景方法",
+      "重新加载当前活动的场景"
+    ]
+  },
+  {
+    "name": "get_viewport",
+    "trans": [
+      "获取视口方法",
+      "获取节点所在的视口实例"
+    ]
+  },
+  {
+    "name": "set_global_position",
+    "trans": [
+      "设置全局位置方法",
+      "设置节点的全局坐标位置，忽略父节点变换"
+    ]
+  },
+  {
+    "name": "get_global_position",
+    "trans": [
+      "获取全局位置方法",
+      "获取节点的全局坐标位置，忽略父节点变换"
+    ]
+  },
+  {
+    "name": "to_local",
+    "trans": [
+      "转换到局部坐标方法",
+      "将全局坐标转换为节点的局部坐标"
+    ]
+  },
+  {
+    "name": "to_global",
+    "trans": [
+      "转换到全局坐标方法",
+      "将局部坐标转换为全局坐标"
+    ]
+  },
+  {
+    "name": "look_at",
+    "trans": [
+      "注视方法",
+      "旋转节点使其朝向指定位置"
+    ]
+  },
+  {
+    "name": "distance_to",
+    "trans": [
+      "计算距离方法",
+      "计算与另一个向量或位置之间的距离"
+    ]
+  },
+  {
+    "name": "direction_to",
+    "trans": [
+      "计算方向方法",
+      "计算指向另一个向量或位置的单位方向向量"
+    ]
+  },
+  {
+    "name": "lerp",
+    "trans": [
+      "线性插值方法",
+      "在两个值之间进行线性插值，实现平滑过渡"
+    ]
+  },
+  {
+    "name": "clamp",
+    "trans": [
+      "限制范围方法",
+      "将值限制在最小值和最大值之间"
+    ]
+  },
+  {
+    "name": "normalized",
+    "trans": [
+      "单位化方法",
+      "将向量转换为单位向量，保持方向但长度为1"
+    ]
+  },
+  {
+    "name": "get_overlapping_bodies",
+    "trans": [
+      "获取重叠物体方法",
+      "获取与Area2D/3D重叠的所有物理体"
+    ]
+  },
+  {
+    "name": "get_overlapping_areas",
+    "trans": [
+      "获取重叠区域方法",
+      "获取与Area2D/3D重叠的所有区域"
+    ]
+  },
+  {
+    "name": "has_overlapping_bodies",
+    "trans": [
+      "检测重叠物体方法",
+      "检测Area2D/3D是否与任何物理体重叠"
+    ]
+  },
+  {
+    "name": "has_overlapping_areas",
+    "trans": [
+      "检测重叠区域方法",
+      "检测Area2D/3D是否与任何区域重叠"
+    ]
+  },
+  {
+    "name": "get_collision_layer_bit",
+    "trans": [
+      "获取碰撞层位方法",
+      "获取指定碰撞层的启用状态"
+    ]
+  },
+  {
+    "name": "set_collision_layer_bit",
+    "trans": [
+      "设置碰撞层位方法",
+      "设置指定碰撞层的启用状态"
+    ]
+  },
+  {
+    "name": "get_collision_mask_bit",
+    "trans": [
+      "获取碰撞掩码位方法",
+      "获取指定碰撞掩码位的启用状态"
+    ]
+  },
+  {
+    "name": "set_collision_mask_bit",
+    "trans": [
+      "设置碰撞掩码位方法",
+      "设置指定碰撞掩码位的启用状态"
+    ]
+  },
+  {
+    "name": "add_to_group",
+    "trans": [
+      "添加到组方法",
+      "将节点添加到指定组，便于批量操作"
+    ]
+  },
+  {
+    "name": "remove_from_group",
+    "trans": [
+      "从组移除方法",
+      "将节点从指定组中移除"
+    ]
+  },
+  {
+    "name": "is_in_group",
+    "trans": [
+      "检测是否在组方法",
+      "检测节点是否属于指定组"
+    ]
+  },
+  {
+    "name": "get_groups",
+    "trans": [
+      "获取所有组方法",
+      "获取节点所属的所有组"
+    ]
+  },
+  {
+    "name": "get_tree().get_nodes_in_group",
+    "trans": [
+      "获取组内所有节点方法",
+      "获取属于指定组的所有节点"
+    ]
+  },
+  {
+    "name": "start",
+    "trans": [
+      "启动方法",
+      "启动Timer计时器或粒子系统"
+    ]
+  },
+  {
+    "name": "stop",
+    "trans": [
+      "停止方法",
+      "停止Timer计时器或粒子系统"
+    ]
+  },
+  {
+    "name": "set_wait_time",
+    "trans": [
+      "设置等待时间方法",
+      "设置Timer计时器的等待时间"
+    ]
+  },
+  {
+    "name": "get_time_left",
+    "trans": [
+      "获取剩余时间方法",
+      "获取Timer计时器的剩余时间"
+    ]
+  },
+  {
+    "name": "is_stopped",
+    "trans": [
+      "检测是否停止方法",
+      "检测Timer计时器是否已停止"
+    ]
+  },
+  {
+    "name": "set_one_shot",
+    "trans": [
+      "设置单次执行方法",
+      "设置Timer计时器是否为单次模式"
+    ]
+  },
+  {
+    "name": "set_autostart",
+    "trans": [
+      "设置自动启动方法",
+      "设置Timer计时器是否自动启动"
+    ]
+  },
+  {
+    "name": "set_emitting",
+    "trans": [
+      "设置发射状态方法",
+      "设置粒子系统是否发射粒子"
+    ]
+  },
+  {
+    "name": "set_explosiveness",
+    "trans": [
+      "设置爆炸性方法",
+      "设置粒子系统发射的爆炸性程度"
+    ]
+  },
+  {
+    "name": "set_amount",
+    "trans": [
+      "设置数量方法",
+      "设置粒子系统一次发射的粒子数量"
+    ]
+  },
+  {
+    "name": "set_lifetime",
+    "trans": [
+      "设置生命周期方法",
+      "设置粒子系统中粒子的生命周期"
+    ]
+  },
+  {
+    "name": "set_speed_scale",
+    "trans": [
+      "设置速度比例方法",
+      "设置AnimationPlayer的播放速度比例"
+    ]
+  },
+  {
+    "name": "seek",
+    "trans": [
+      "跳转方法",
+      "跳转到AnimationPlayer动画的指定时间位置"
+    ]
+  },
+  {
+    "name": "get_current_animation",
+    "trans": [
+      "获取当前动画方法",
+      "获取AnimationPlayer当前播放的动画名称"
+    ]
+  },
+  {
+    "name": "get_animation_list",
+    "trans": [
+      "获取动画列表方法",
+      "获取AnimationPlayer中的所有动画名称列表"
+    ]
+  },
+  {
+    "name": "has_animation",
+    "trans": [
+      "检测是否有动画方法",
+      "检测AnimationPlayer是否包含指定名称的动画"
+    ]
+  },
+  {
+    "name": "blend_tracks",
+    "trans": [
+      "混合轨道方法",
+      "在AnimationPlayer中混合多个动画轨道"
+    ]
+  },
+  {
+    "name": "set_texture",
+    "trans": [
+      "设置纹理方法",
+      "为Sprite2D或TextureRect设置纹理资源"
+    ]
+  },
+  {
+    "name": "set_modulate",
+    "trans": [
+      "设置调制方法",
+      "设置CanvasItem的颜色调制，影响渲染颜色"
+    ]
+  },
+  {
+    "name": "set_visible",
+    "trans": [
+      "设置可见性方法",
+      "设置节点的可见性状态"
+    ]
+  },
+  {
+    "name": "show",
+    "trans": [
+      "显示方法",
+      "将节点设置为可见状态"
+    ]
+  },
+  {
+    "name": "hide",
+    "trans": [
+      "隐藏方法",
+      "将节点设置为不可见状态"
+    ]
+  },
+  {
+    "name": "is_visible",
+    "trans": [
+      "检测是否可见方法",
+      "检测节点是否处于可见状态"
+    ]
+  },
+  {
+    "name": "set_process_input",
+    "trans": [
+      "设置处理输入方法",
+      "启用或禁用节点的输入处理"
+    ]
+  },
+  {
+    "name": "set_process_unhandled_input",
+    "trans": [
+      "设置处理未处理输入方法",
+      "启用或禁用节点的未处理输入处理"
+    ]
+  },
+  {
+    "name": "set_process_internal",
+    "trans": [
+      "设置内部处理方法",
+      "启用或禁用节点的内部处理"
+    ]
+  },
+  {
+    "name": "set_physics_process_internal",
+    "trans": [
+      "设置内部物理处理方法",
+      "启用或禁用节点的内部物理处理"
+    ]
+  },
+  {
+    "name": "can_process",
+    "trans": [
+      "检测能否处理方法",
+      "检测节点是否能够处理帧更新"
+    ]
+  },
+  {
+    "name": "set_pause_mode",
+    "trans": [
+      "设置暂停模式方法",
+      "设置节点在游戏暂停时的行为模式"
+    ]
+  },
+  {
+    "name": "get_pause_mode",
+    "trans": [
+      "获取暂停模式方法",
+      "获取节点在游戏暂停时的行为模式"
+    ]
+  },
+  {
+    "name": "set_script",
+    "trans": [
+      "设置脚本方法",
+      "为节点设置新的脚本"
+    ]
+  },
+  {
+    "name": "get_script",
+    "trans": [
+      "获取脚本方法",
+      "获取节点当前的脚本"
+    ]
+  },
+  {
+    "name": "has_method",
+    "trans": [
+      "检测是否有方法",
+      "检测对象是否包含指定名称的方法"
+    ]
+  },
+  {
+    "name": "has_signal",
+    "trans": [
+      "检测是否有信号",
+      "检测对象是否包含指定名称的信号"
+    ]
+  },
+  {
+    "name": "get_signal_list",
+    "trans": [
+      "获取信号列表方法",
+      "获取对象的所有信号列表"
+    ]
+  },
+  {
+    "name": "get_method_list",
+    "trans": [
+      "获取方法列表方法",
+      "获取对象的所有方法列表"
+    ]
+  },
+  {
+    "name": "get_property_list",
+    "trans": [
+      "获取属性列表方法",
+      "获取对象的所有属性列表"
+    ]
+  },
+  {
+    "name": "set",
+    "trans": [
+      "设置属性方法",
+      "通过名称设置对象的属性值"
+    ]
+  },
+  {
+    "name": "get",
+    "trans": [
+      "获取属性方法",
+      "通过名称获取对象的属性值"
+    ]
+  },
+  {
+    "name": "call",
+    "trans": [
+      "调用方法",
+      "通过名称调用对象的方法"
+    ]
+  },
+  {
+    "name": "callv",
+    "trans": [
+      "带参数数组调用方法",
+      "通过名称和参数数组调用对象的方法"
+    ]
+  },
+  {
+    "name": "instance",
+    "trans": [
+      "实例化方法",
+      "创建类或脚本的新实例"
+    ]
+  },
+  {
+    "name": "free",
+    "trans": [
+      "释放方法",
+      "立即释放对象占用的资源"
+    ]
+  },
+  {
+    "name": "is_queued_for_deletion",
+    "trans": [
+      "检测是否排队删除方法",
+      "检测对象是否已排队等待删除"
+    ]
+  },
+  {
+    "name": "duplicate",
+    "trans": [
+      "复制方法",
+      "创建节点的副本，包括所有属性和子节点"
+    ]
+  },
+  {
+    "name": "replace_by",
+    "trans": [
+      "替换方法",
+      "用另一个节点替换当前节点"
+    ]
+  },
+  {
+    "name": "print",
+    "trans": [
+      "打印方法",
+      "在控制台输出调试信息"
+    ]
+  },
+  {
+    "name": "print_debug",
+    "trans": [
+      "调试打印方法",
+      "在控制台输出调试信息，包括调用位置"
+    ]
+  },
+  {
+    "name": "push_error",
+    "trans": [
+      "推送错误方法",
+      "在控制台输出错误信息"
+    ]
+  },
+  {
+    "name": "push_warning",
+    "trans": [
+      "推送警告方法",
+      "在控制台输出警告信息"
+    ]
+  },
+  {
+    "name": "assert",
+    "trans": [
+      "断言方法",
+      "检查条件是否为真，如果为假则输出错误"
+    ]
+  },
+  {
+    "name": "get_index",
+    "trans": [
+      "获取索引方法",
+      "获取节点在父节点中的位置索引"
+    ]
+  },
+  {
+    "name": "get_parent",
+    "trans": [
+      "获取父节点方法",
+      "获取节点的父节点"
+    ]
+  },
+  {
+    "name": "get_child",
+    "trans": [
+      "获取子节点方法",
+      "通过索引获取指定位置的子节点"
+    ]
+  },
+  {
+    "name": "get_children",
+    "trans": [
+      "获取所有子节点方法",
+      "获取节点的所有子节点列表"
+    ]
+  },
+  {
+    "name": "get_node_or_null",
+    "trans": [
+      "获取节点或空方法",
+      "通过路径获取节点，如果不存在则返回null"
+    ]
+  },
+  {
+    "name": "find_node",
+    "trans": [
+      "查找节点方法",
+      "在子节点中查找具有指定名称的节点"
+    ]
+  },
+  {
+    "name": "find_parent",
+    "trans": [
+      "查找父节点方法",
+      "在父节点链中查找具有指定名称的节点"
+    ]
+  },
+  {
+    "name": "is_a_parent_of",
+    "trans": [
+      "检测是否父节点方法",
+      "检测当前节点是否是指定节点的父节点"
+    ]
+  },
+  {
+    "name": "is_greater_than",
+    "trans": [
+      "检测是否大于方法",
+      "检测节点在场景树中的顺序是否大于另一个节点"
+    ]
+  },
+  {
+    "name": "rpc",
+    "trans": [
+      "远程过程调用方法",
+      "在网络游戏中调用远程客户端的方法"
+    ]
+  },
+  {
+    "name": "rpc_id",
+    "trans": [
+      "指定ID远程过程调用方法",
+      "在网络游戏中调用指定ID远程客户端的方法"
+    ]
+  },
+  {
+    "name": "rset",
+    "trans": [
+      "远程设置属性方法",
+      "在网络游戏中设置远程客户端的属性"
+    ]
+  },
+  {
+    "name": "rset_id",
+    "trans": [
+      "指定ID远程设置属性方法",
+      "在网络游戏中设置指定ID远程客户端的属性"
+    ]
+  },
+  {
+    "name": "get_rpc_sender_id",
+    "trans": [
+      "获取RPC发送者ID方法",
+      "获取当前RPC调用的发送者ID"
+    ]
+  }
+]
